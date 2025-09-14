@@ -1,21 +1,18 @@
 import {app} from "../src/configurations/firebase-config";
 import {deleteApp} from 'firebase/app';
-import {addCategory, isCategoryExists, removeCategory} from "../src/firebase/firebaseDBService.ts";
+import {addCategory, getAllCategories, isCategoryExists, removeCategory} from "../src/firebase/firebaseDBService.ts";
 
 
-describe('BakeryShop Тесты', () => {
 
+describe('BakeryShop', () => {
 
     const testsCategories = ['test-add', 'test-delete'];
-
 
     const cleanCategories = async () => {
         for (const category of testsCategories) {
             try {
                 await removeCategory(category);
-            } catch (e) {
-                console.log(e)
-            }
+            } catch (e) { /* empty */ }
         }
     };
 
@@ -36,8 +33,19 @@ describe('BakeryShop Тесты', () => {
         expect(isCategoryExists('milk')).resolves.toBeFalsy();
     });
 
+    test('Test: allCategory' , async () => {
+        const allCategories = await getAllCategories();
 
-    test('Test: allCategory', async () => {
+        const existenceChecks = allCategories.map(name => isCategoryExists(name));
+        const results = await Promise.all(existenceChecks);
+
+        const allExist = results.every(exists => exists);
+        expect(allExist).toBeTruthy();
+    });
+
+
+
+    test('Test: Category', async () => {
 
         const categories = ['bread'];
 

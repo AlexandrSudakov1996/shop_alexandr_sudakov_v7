@@ -12,7 +12,8 @@ describe('BakeryShop', () => {
         for (const category of testsCategories) {
             try {
                 await removeCategory(category);
-            } catch (e) { /* empty */ }
+            } catch (e) {
+                console.log(e)}
         }
     };
 
